@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>تأكيد الحضور</title>
+</head>
+<body style="margin:0;background:#F4F2F8;font-family:Tahoma,Arial,sans-serif;">
+<div style="max-width:420px;margin:60px auto;background:#fff;border:1px solid #E6E1EF;border-radius:18px;padding:32px 24px;text-align:center;direction:rtl;">
+  <div id="title" style="font-size:24px;font-weight:bold;color:#1E1A26;margin-bottom:10px;">لحظة...</div>
+  <div id="text" style="font-size:16px;line-height:1.8;color:#3A3446;">جاري تسجيل ردّك</div>
+  <div style="margin-top:22px;font-size:14px;font-weight:bold;color:#5E4B8B;">مبادرة اتبعك</div>
+</div>
+<script>
+  // يرسل الرد لتطبيق Apps Script بـ JSONP ويعرض النتيجة هنا
+  var APP = 'https://script.google.com/macros/s/AKfycbzSN2mKT750XjRtJfd27Y8Mu8Nj7nmYnLkUD_1YfoHDD-7T_unslH9MQIIpWSO9BnX7Jg/exec';
+  var done = false;
+
+  function show(title, text) {
+    done = true;
+    document.getElementById('title').textContent = title;
+    document.getElementById('text').textContent = text;
+    document.title = title;
+  }
+
+  function onResult(res) {
+    show(res.title, res.text);
+  }
+
+  function fail() {
+    if (!done) show('ما قدرنا نسجّل ردّك', 'جرّب تفتح الرابط مرة ثانية، أو تواصل معنا بالرد على الإيميل.');
+  }
+
+  var p = new URLSearchParams(location.search);
+  var id = p.get('id') || '';
+  var r = p.get('r') || '';
+  var s = document.createElement('script');
+  s.src = APP + '?id=' + encodeURIComponent(id) + '&r=' + encodeURIComponent(r) + '&callback=onResult&t=' + Date.now();
+  s.onerror = fail;
+  document.body.appendChild(s);
+  setTimeout(fail, 20000);
+</script>
+</body>
+</html>
